@@ -1,9 +1,11 @@
 var https = require("https");
 var fs = require("fs");
 var {argv} = process;
+var od;
 argv.shift();
 argv.shift();
 if(fs.existsSync(argv[0])){
+  od = new Date();
   var data = fs.readFileSync(argv[0]) + "";
   var req = https.request({
     hostname: "not-compiler.theforarkld.repl.co",
@@ -21,7 +23,7 @@ if(fs.existsSync(argv[0])){
     });
     res.on("end",()=>{
       fs.writeFileSync(argv[0].replace(/([\S\s]+)\.[^\.]+/,"$1"),Buffer.concat(d));
-      console.log("done.            ");
+      console.log("done. (" + (new Date() - od) + "ms)             ");
     });
   });
   req.write(data);
